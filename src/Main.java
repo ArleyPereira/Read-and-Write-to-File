@@ -49,16 +49,25 @@ public class Main {
 
     // Escreve no arquivo de saida
     public static void writeFile(ArrayList<String> lineList, String fileInp) {
+
+        String id = fileInp.replaceAll("area_", "").replaceAll(".txt", "");
+
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("S:\\TI\\Areas\\Atualizados\\" + fileInp))) {
             for (int j = 0; j < lineList.size(); j++) {
 
                 String[] lines = lineList.get(j).split(" ");
+
+                if(j == 0){
+                    bw.write("UPDATE `delivery_areas` SET `geometry`=(PolyFromText('POLYGON((");
+                    bw.newLine();
+                }
 
                 // Remove a linha do último
                 if (j != lineList.size() - 1) {
                     bw.write("-" + lines[1] + " " + "-" + lines[0] + ",");
                 } else {
                     bw.write("-" + lines[1] + " " + "-" + lines[0]);
+                    bw.write("))')) WHERE id=" + id + ";");
                 }
                 bw.newLine();
             }
